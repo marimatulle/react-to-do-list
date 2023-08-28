@@ -7,7 +7,7 @@ const TodoList = () => {
 
   const addTodo = () => {
     if (inputValue.trim() !== "") {
-      setTodos([...todos, inputValue]);
+      setTodos([...todos, { todo: inputValue, completed: false}]);
       setInputValue("");
     }
   };
@@ -17,6 +17,13 @@ const TodoList = () => {
     setTodos(newTodos);
   };
 
+  const toggleTodo = (index) => {
+    const newTodos = todos.map((todo, i) => 
+      i === index ? { ...todo, completed: !todo.completed } : todo
+      );
+    setTodos(newTodos);
+  }
+
   return (
     <div>
       <div>
@@ -24,7 +31,7 @@ const TodoList = () => {
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Add a new to-do"
+          placeholder="Enter a task"
         />
         <button onClick={addTodo}>Add</button>
       </div>
@@ -32,7 +39,9 @@ const TodoList = () => {
         {todos.map((todo, index) => (
           <TodoItem
             key={index}
-            todo={todo}
+            todo={todo.todo}
+            completed={todo.completed}
+            onToggle={() => toggleTodo(index)}
             onDelete={() => deleteTodo(index)}
           />
         ))}
